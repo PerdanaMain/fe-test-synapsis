@@ -1,7 +1,6 @@
 "use client";
-import "datatables.net-dt";
-import "datatables.net-dt/css/jquery.dataTables.css";
-import $ from "jquery";
+
+import Script from "next/script";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -10,8 +9,8 @@ import Swal from "sweetalert2";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Navbar from "@/components/Navbar";
-import Update from "./Update";
 import Insert from "./Insert";
+import Update from "./Update";
 
 interface user {
   id: number;
@@ -31,13 +30,6 @@ const Page = () => {
     // Fetch users data
     fetchUsers();
   }, []);
-
-  useEffect(() => {
-    // Initialize DataTables after users data has been updated
-    if (!loading) {
-      $("#user-table").DataTable();
-    }
-  }, [loading]);
 
   const fetchUsers = async () => {
     try {
@@ -85,13 +77,18 @@ const Page = () => {
 
   return (
     <>
+      {/* Load jQuery using next/script */}x
+      <Script
+        src="https://code.jquery.com/jquery-3.6.4.min.js"
+        strategy="beforeInteractive"
+      />
       <Navbar />
       <Header />
       <div className="my-5 p-5">
         <Insert onInsertOrUpdate={insertOrUpdateHandler} />
 
         <div className="overflow-x-auto mt-5">
-          <table className="table" id="user-table">
+          <table className="table">
             {/* head */}
             <thead>
               <tr>
@@ -141,7 +138,6 @@ const Page = () => {
           </table>
         </div>
       </div>
-
       <Footer />
     </>
   );

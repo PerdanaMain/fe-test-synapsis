@@ -87,7 +87,7 @@ const Insert: React.FC<InsertProps> = ({ onInsertOrUpdate }) => {
                 onChange={(e) => setName(e.target.value)}
               />
             </label>
-
+            {name}
             <label className="input input-bordered my-4 flex items-center gap-2">
               Email
               <input
@@ -97,6 +97,7 @@ const Insert: React.FC<InsertProps> = ({ onInsertOrUpdate }) => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </label>
+            {email}
             <label className="input input-bordered my-4 flex items-center gap-2">
               Gender
               <select
@@ -104,14 +105,13 @@ const Insert: React.FC<InsertProps> = ({ onInsertOrUpdate }) => {
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
               >
-                <option selected hidden>
-                  -- gender ---
+                <option value="male" selected>
+                  Male
                 </option>
-                <option>Male</option>
-                <option>Female</option>
+                <option value="female">Female</option>
               </select>
             </label>
-
+            {gender}
             <label className="input input-bordered my-4 flex items-center gap-2">
               Status
               <select
@@ -119,13 +119,14 @@ const Insert: React.FC<InsertProps> = ({ onInsertOrUpdate }) => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option selected hidden>
-                  -- status ---
+                <option value="active" selected>
+                  Active
                 </option>
-                <option>Active</option>
-                <option>Inactive</option>
+                <option value="inactive">Inactive</option>
               </select>
             </label>
+            {status}
+
             {/* Submit Button */}
             <button className="btn btn-primary me-3" type="submit">
               {isSubmitting ? (
