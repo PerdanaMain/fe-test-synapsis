@@ -79,12 +79,16 @@ const Page = () => {
     }
   };
 
+  const insertOrUpdateHandler = () => {
+    fetchUsers();
+  };
+
   return (
     <>
       <Navbar />
       <Header />
       <div className="my-5 p-5">
-        <Insert />
+        <Insert onInsertOrUpdate={insertOrUpdateHandler} />
 
         <div className="overflow-x-auto mt-5">
           <table className="table" id="user-table">
@@ -119,7 +123,10 @@ const Page = () => {
                   </td>
                   <td>
                     <div className="flex items-center">
-                      <Update user={user} />
+                      <Update
+                        user={user}
+                        onInsertOrUpdate={insertOrUpdateHandler}
+                      />
                       <button
                         className="text-sm"
                         onClick={() => deleteHandler(user.id)}

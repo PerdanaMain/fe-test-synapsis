@@ -10,7 +10,11 @@ interface user {
   status: string;
 }
 
-const Update = ({ user }: { user: user }) => {
+interface UpdateProps {
+  user: user;
+  onInsertOrUpdate: () => void;
+}
+const Update: React.FC<UpdateProps> = ({ user, onInsertOrUpdate }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const accessToken =
@@ -52,7 +56,9 @@ const Update = ({ user }: { user: user }) => {
             "Success!",
             `User ${user.id} updated successfully`,
             "success"
-          );
+          ).then(() => {
+            onInsertOrUpdate();
+          });
         });
     } catch (error: any) {
       Swal.fire("Error!", error.message, "error");
