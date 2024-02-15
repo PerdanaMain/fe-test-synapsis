@@ -1,95 +1,75 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
 
-export default function Home() {
-  return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+import Footer from "@/components/Footer";
+import PostList from "@/components/PostList";
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+interface Post {
+  id: number;
+  user_id: number;
+  title: string;
+  body: string;
+  created_at: string;
+  updated_at: string;
 }
+
+const Home = () => {
+  const [posts, setPosts] = useState([] as Post[]);
+  const [loading, setLoading] = useState(true);
+  const [vPosts, setVPosts] = useState(7);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      const res = await axios.get("https://gorest.co.in/public/v2/posts");
+      setPosts(res.data);
+      setLoading(false);
+    };
+
+    fetchPosts();
+  }, []);
+
+  const showMorePosts = () => {
+    setVPosts((prev) => prev + 7);
+  };
+
+  return (
+    <>
+      <Navbar />
+      <Header />
+
+      <div className="p-10">
+        {loading ? (
+          <div className="flex items-center justify-center ">
+            <div className="text-center text-2xl">
+              <span className="loading loading-ball loading-lg"></span>
+              Loading...
+            </div>
+          </div>
+        ) : (
+          posts
+            .slice(0, vPosts)
+            .map((post, index) => <PostList key={post.id} post={post} />)
+        )}
+
+        {vPosts < posts.length && (
+          <div className="mt-10 flex justify-center">
+            <button
+              className="relative inline-flex items-center gap-1 rounded-md border border-gray-300 bg-white px-3 py-2 pl-4 text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-20 disabled:pointer-events-none disabled:opacity-40 dark:border-gray-500 dark:bg-gray-800 dark:text-gray-300"
+              onClick={showMorePosts}
+            >
+              View all Posts
+            </button>
+          </div>
+        )}
+      </div>
+
+      <Footer />
+    </>
+  );
+};
+
+export default Home;
